@@ -290,10 +290,10 @@ class Handler(BaseHTTPRequestHandler):
         params = urllib.parse.parse_qs(parsed.query)
 
         if parsed.path in ("/", "/index.html", "/ALM_to_ARS_Converter.html"):
-            # Serve the converter HTML so the page runs on http:// (no file:// CORS issues)
-            import os
-            html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                     "ALM_to_ARS_Converter.html")
+            # Serve the generated UI when someone opens the helper directly.
+            # The editable source now lives under src/ui; build output is release/index.html.
+            here = os.path.dirname(os.path.abspath(__file__))
+            html_path = os.path.abspath(os.path.join(here, "..", "..", "release", "index.html"))
             try:
                 with open(html_path, "rb") as f:
                     body = f.read()
@@ -303,7 +303,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(body)
             except FileNotFoundError:
-                self._json({"error": "ALM_to_ARS_Converter.html not found"}, 404)
+                self._json({"error": "release/index.html not found. Run npm run build first."}, 404)
             return
 
         if parsed.path == "/health":
