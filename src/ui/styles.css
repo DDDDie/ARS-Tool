@@ -133,6 +133,27 @@ tbody td input:focus,tbody td select:focus{outline:none;border-color:#cc0000}
 .gen-btn:hover{background:#aa0000}
 .gen-btn:disabled{background:#bbb;cursor:not-allowed}
 .gen-btn:not(:disabled):hover{transform:translateY(-1px)}
+.email-draft{margin-top:0}
+.email-draft-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+.email-draft-head h3{font-size:16px;font-weight:700;color:#333;margin:0 0 4px}
+.email-draft-head p{font-size:12px;color:#667085;line-height:1.5;margin:0}
+.email-draft-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1px solid #b7dfc6;background:#f3fbf6;color:#155724;font-size:11px;font-weight:700;padding:5px 10px;white-space:nowrap}
+.email-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.email-grid .fg.full{grid-column:1/-1}
+.email-grid textarea{min-height:190px;line-height:1.55;resize:vertical;scrollbar-width:thin;scrollbar-color:#cfd6df transparent}
+.email-grid textarea::-webkit-scrollbar{width:8px}
+.email-grid textarea::-webkit-scrollbar-track{background:transparent}
+.email-grid textarea::-webkit-scrollbar-thumb{background:#cfd6df;border-radius:999px;border:2px solid #fff}
+.email-grid textarea::-webkit-scrollbar-thumb:hover{background:#aab4c0}
+.email-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:14px;flex-wrap:wrap}
+.email-primary{background:#0066cc;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;min-height:40px}
+.email-primary:hover{background:#0055aa}
+.email-secondary{background:#fff;color:#0066cc;border:1px solid #bdd7ff;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;min-height:40px}
+.email-secondary:hover{background:#f0f7ff;border-color:#8bbcff}
+.email-actions .btn-icon{width:15px;height:15px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.email-actions .btn-emoji{font-size:15px;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.email-copied{font-size:12px;font-weight:700;color:#155724;background:#f3fbf6;border:1px solid #b7dfc6;border-radius:999px;padding:5px 10px}
+.email-help{margin-top:10px;color:#667085;font-size:12px;line-height:1.5;text-align:right}
 .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -239,6 +260,8 @@ tbody td input:focus,tbody td select:focus{outline:none;border-color:#cc0000}
   .gen-wrap{flex-direction:column;align-items:flex-start}
   .gen-actions{width:100%;justify-content:flex-start}
   .gen-btn{width:100%;min-width:0}
+  .email-draft-head{flex-direction:column}
+  .email-grid{grid-template-columns:1fr}
 }
 @media(max-width:520px){
   .summary-grid{grid-template-columns:1fr}

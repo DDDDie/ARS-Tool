@@ -223,13 +223,13 @@
   </div>
 </div>
 
-<!-- Generate -->
+<!-- Step 4 -->
 <div class="card hidden" id="s4">
   <h2><span class="step-badge">4</span>Generate Pick-up Request</h2>
   <div class="gen-wrap">
     <div class="gen-copy">
       <h3>Review complete. Export the submission file.</h3>
-      <p>Generate the filled ARS template after you confirm the overview information, grouped products, and returned serial numbers.</p>
+      <p>Generate the filled ARS template after you confirm the overview information, grouped products, and returned serial numbers. Step 5 will prepare the partner email draft after export.</p>
       <div class="gen-note">&#128190; Output: <span id="genNoteFilename">ARS_Template_&lt;Account&gt;_&lt;Date&gt;.xlsx</span></div>
     </div>
     <div class="gen-actions">
@@ -237,6 +237,46 @@
         &#11015; Generate Pick-up Request
       </button>
     </div>
+  </div>
+</div>
+
+<!-- Step 5 -->
+<div class="card hidden" id="s5">
+  <h2><span class="step-badge">5</span>Email Partner</h2>
+  <div id="emailDraft" class="email-draft">
+    <div class="email-draft-head">
+      <div>
+        <h3>Partner email draft</h3>
+        <p>Review the generated message, then open it in your default mail app.</p>
+      </div>
+      <span class="email-draft-pill">Draft ready</span>
+    </div>
+    <div class="email-grid">
+      <div class="fg">
+        <label>To</label>
+        <input id="em_to" type="email" placeholder="partner@example.com">
+      </div>
+      <div class="fg">
+        <label>Subject</label>
+        <input id="em_subj" type="text">
+      </div>
+      <div class="fg full">
+        <label>Body</label>
+        <textarea id="em_body" rows="12"></textarea>
+      </div>
+    </div>
+    <div class="email-actions">
+      <button class="email-primary" onclick="openEmailDraft()">
+        <span class="btn-emoji" aria-hidden="true">&#128231;</span>
+        Open Email Draft
+      </button>
+      <button class="email-secondary" onclick="copyEmailBody()">
+        <span class="btn-emoji" aria-hidden="true">&#128203;</span>
+        Copy Body
+      </button>
+      <span id="em_copied" class="email-copied hidden">Copied</span>
+    </div>
+    <div class="email-help">The generated Excel file needs to be attached manually after your mail app opens.</div>
   </div>
 </div>
 </div><!-- end t1 -->

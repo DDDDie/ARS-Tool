@@ -583,6 +583,8 @@ function onParsed(data, fname, sheetName, fm, pivotTotal) {
   }
 
   ["s2","s3","s4"].forEach(id => document.getElementById(id).classList.remove("hidden"));
+  const emailStep = document.getElementById("s5");
+  if (emailStep) emailStep.classList.add("hidden");
   // Show floating generate button only if user is on Tab 1 (Pick-up Request Generator)
   try {
     const fab = document.getElementById("fabGen");
@@ -1494,6 +1496,109 @@ async function doGenerate(){
   const a=document.createElement('a');
   a.href=url;a.download=outName;a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
+  generateEmailDraft(outName);
+}
+
+function getFieldValue(id, fallback) {
+  const el = document.getElementById(id);
+  const value = el ? String(el.value || '').trim() : '';
+  return value || fallback || '';
+}
+
+function buildDeviceSummaryLines() {
+  return Array.from(document.querySelectorAll('#ptbody tr'))
+    .map(tr => {
+      const data = getRowData(tr);
+      const model = String(data.model || '').trim();
+      if (!model) return null;
+      const manufacturer = String(data.mfr || '').trim();
+      const qty = data.qty || 1;
+      return `  - ${manufacturer ? manufacturer + ' ' : ''}${model} x ${qty}`;
+    })
+    .filter(Boolean);
+}
+
+function generateEmailDraft(fileName) {
+  const step = document.getElementById('s5');
+  const draft = document.getElementById('emailDraft');
+  if (!draft) return;
+
+  const account = getFieldValue('f_account', '[Customer Name]');
+  const address = getFieldValue('f_addr', '');
+  const country = getFieldValue('f_country', '');
+  const date = getFieldValue('f_date', '[Collection Date]');
+  const logistics = getFieldValue('f_logistics', '');
+  const comments = getFieldValue('f_comments', '');
+  const location = [address, country].filter(Boolean).join(', ') || '[Customer Address]';
+  const deviceLines = buildDeviceSummaryLines();
+  const attachmentName = fileName || getFieldValue('genNoteFilename', 'ARS Pick-up Request file');
+
+  const subject = `Pick-up Request - ${account} - ${date}`;
+  const body = [
+    'Dear Partner,',
+    '',
+    'Please be informed that we have a scheduled IT asset pick-up at the following customer location. Kindly arrange for collection on the expected date below.',
+    '',
+    'PICK-UP DETAILS',
+    '------------------------------',
+    `Customer       : ${account}`,
+    `Location       : ${location}`,
+    `Collection Date: ${date}`,
+    logistics ? `Logistics      : ${logistics}` : null,
+    '',
+    'ASSETS TO BE COLLECTED',
+    '------------------------------',
+    deviceLines.length ? deviceLines.join('\n') : '  - See attached ARS Pick-up Request for full asset list',
+    '',
+    `Please find the ARS Pick-up Request file attached: ${attachmentName}`,
+    '',
+    comments ? `Additional Notes:\n${comments}\n` : null,
+    'Please confirm receipt of this email and your availability for the scheduled collection.',
+    '',
+    'Best regards,',
+  ].filter(line => line !== null).join('\n');
+
+  const toEl = document.getElementById('em_to');
+  const subjEl = document.getElementById('em_subj');
+  const bodyEl = document.getElementById('em_body');
+  if (toEl && !toEl.value) toEl.value = '';
+  if (subjEl) subjEl.value = subject;
+  if (bodyEl) bodyEl.value = body;
+
+  if (step) step.classList.remove('hidden');
+  draft.classList.remove('hidden');
+  (step || draft).scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function openEmailDraft() {
+  const to = getFieldValue('em_to', '');
+  const subject = getFieldValue('em_subj', '');
+  const body = getFieldValue('em_body', '');
+  const mailto = 'mailto:' + encodeURIComponent(to)
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+}
+
+function copyEmailBody() {
+  const body = getFieldValue('em_body', '');
+  const copied = document.getElementById('em_copied');
+  const showCopied = () => {
+    if (!copied) return;
+    copied.classList.remove('hidden');
+    setTimeout(() => copied.classList.add('hidden'), 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(body).then(showCopied).catch(() => {});
+  } else {
+    const bodyEl = document.getElementById('em_body');
+    if (bodyEl) {
+      bodyEl.focus();
+      bodyEl.select();
+      document.execCommand('copy');
+      showCopied();
+    }
+  }
 }
 
 function b64ToArr(b64){
@@ -2178,4 +2283,3 @@ function dpRender() {
 
   pop.innerHTML = h;
 }
-
